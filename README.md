@@ -1,6 +1,11 @@
 # PyTorch EfficientDet Solution for Global Wheat Detection Challenge
 
-(Documentation is still WIP)
+1. [Training notebook (on Kaggle)](https://www.kaggle.com/ceshine/wheat-detection-training-efficientdet-public?scriptVersionId=67789208&select=wheatdet.pth)
+2. Inference notebook: [Single model](https://www.kaggle.com/ceshine/effdet-wheat-head-detection-inference-public?scriptVersionId=67809685); [Ensemble](https://www.kaggle.com/ceshine/effdet-wheat-head-detection-inference-public/output?scriptVersionId=67812782)
+
+See [wheat/config.py](wheat/config.py) for hyper-parameters and system configurations.
+
+The best mAP score I'm able to get is 0.6167 (Private) / 0.7084 (Public) with a D4 model trained on 768x768 resolution (using a single P100 GPU).
 
 ## Requirements
 
