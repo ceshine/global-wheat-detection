@@ -107,6 +107,7 @@ class WheatDataset(Dataset):
         """
         w, h = self.image_size, self.image_size
         border_size = self.image_size // 2
+        min_visibility = self.transforms.processors["bboxes"].params.min_visibility
 
         xc, yc = [
             int(random.uniform(border_size // 2, self.image_size - border_size // 2))
@@ -152,11 +153,14 @@ class WheatDataset(Dataset):
             boxes[:, 1] += padh
             boxes[:, 2] += padw
             boxes[:, 3] += padh
+
+            area_before = (boxes[:, 2] - boxes[:, 0]) * (boxes[:, 3] - boxes[:, 1])
             # Filter non-boxes
             np.clip(boxes, 0, self.image_size, out=boxes)
-            boxes = boxes[
-                np.where((boxes[:, 2] - boxes[:, 0]) * (boxes[:, 3] - boxes[:, 1]) > 0)
-            ]
+            area_after = (boxes[:, 2] - boxes[:, 0]) * (boxes[:, 3] - boxes[:, 1])
+            visibility = area_after / area_before
+
+            boxes = boxes[np.where(visibility > min_visibility)]
             result_boxes.append(boxes)
 
         result_boxes = np.concatenate(result_boxes, 0)
