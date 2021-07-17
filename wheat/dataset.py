@@ -84,12 +84,13 @@ class WheatDataset(Dataset):
 
         if self.transforms:
             sample = {"image": image, "bboxes": target["bbox"], "labels": target["cls"]}
+            sample = self.transforms(**sample)
             if len(sample["bboxes"]) > 0:
                 # apply augmentation on the fly
                 boxes = sample["bboxes"]
-                target["cls"] = sample["labels"]
-                target["bbox"] = sample["bboxes"]
-                image = sample["image"].transpose(2, 0, 1)
+                target["cls"] = np.asarray(sample["labels"])
+                target["bbox"] = np.asarray(sample["bboxes"])
+            image = sample["image"].transpose(2, 0, 1)
         else:
             image = image.transpose(2, 0, 1)
         # convert to yxyx format
@@ -166,7 +167,7 @@ class WheatDataset(Dataset):
 def get_train_transforms(image_size: int, cutout: bool = False):
     transforms = [
         A.RandomSizedCrop(
-            (int(image_size * 0.8), int(image_size * 0.8)),
+            (int(image_size * 0.8), image_size),
             image_size,
             image_size,
             p=0.5,
