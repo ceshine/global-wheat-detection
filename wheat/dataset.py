@@ -206,7 +206,7 @@ def get_train_transforms(image_size: int, cutout: bool = False):
         bbox_params=A.BboxParams(
             format="pascal_voc",
             min_area=0,
-            min_visibility=0,
+            min_visibility=0.3,
             label_fields=["labels"],
         ),
     )
