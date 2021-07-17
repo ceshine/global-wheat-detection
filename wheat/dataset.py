@@ -87,9 +87,11 @@ class WheatDataset(Dataset):
             sample = self.transforms(**sample)
             if len(sample["bboxes"]) > 0:
                 # apply augmentation on the fly
-                boxes = sample["bboxes"]
                 target["cls"] = np.asarray(sample["labels"])
                 target["bbox"] = np.asarray(sample["bboxes"])
+            else:
+                target["cls"] = np.empty(0, dtype=int)
+                target["bbox"] = np.empty((0, 4), dtype=np.float32)
             image = sample["image"].transpose(2, 0, 1)
         else:
             image = image.transpose(2, 0, 1)
